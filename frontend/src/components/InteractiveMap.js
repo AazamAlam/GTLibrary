@@ -1,7 +1,33 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import './InteractiveMap.css';
 
 const InteractiveMap = ({ onReportClick, itemStatus, areaStatus }) => {
+    const applyStyles = useCallback(() => {
+        // Update styles based on itemStatus
+        for (const itemId in itemStatus) {
+            const elements = document.querySelectorAll(`[data-id='${itemId}']`);
+            elements.forEach(element => {
+                if (itemStatus[itemId] === 'broken') {
+                    element.style.backgroundColor = '#ffcccc'; // Light red
+                } else {
+                    element.style.backgroundColor = ''; // Reset to default
+                }
+            });
+        }
+
+        // Update area styles based on areaStatus
+        for (const areaId in areaStatus) {
+            const element = document.getElementById(`${areaId}-box`) || document.getElementById(`${areaId}-container`);
+            if (element) {
+                const brokenPercentage = areaStatus[areaId];
+                const red = 255;
+                const green = 255 * (1 - brokenPercentage);
+                const blue = 255 * (1 - brokenPercentage);
+                element.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+            }
+        }
+    }, [itemStatus, areaStatus]);
+
     useEffect(() => {
         const sendToBackend = (itemId) => {
             onReportClick(itemId);
@@ -30,9 +56,11 @@ const InteractiveMap = ({ onReportClick, itemStatus, areaStatus }) => {
             if (modalId === 'monitor-horizontal-modal' && data && data.areaId) {
                 const horizontalBody = document.getElementById('horizontal-monitor-body');
                 generateMonitors(horizontalBody, data.areaId, 5);
+                applyStyles(); // Apply styles after generating monitors
             } else if (modalId === 'monitor-vertical-modal' && data && data.areaId) {
                 const verticalBody = document.getElementById('vertical-monitor-body');
                 generateMonitors(verticalBody, data.areaId, 20);
+                applyStyles(); // Apply styles after generating monitors
             } else if (modalId === 'printer-modal' && data && data.printerId) {
                 const printerBody = modal.querySelector('.modal-body');
                 printerBody.innerHTML = ''; // Clear existing
@@ -65,6 +93,7 @@ const InteractiveMap = ({ onReportClick, itemStatus, areaStatus }) => {
 
                 monitor1.textContent = `${data.roomId.replace('-', ' ')} Monitor 1`;
                 monitor2.textContent = `${data.roomId.replace('-', ' ')} Monitor 2`;
+                applyStyles(); // Apply styles after setting data-id for room items
             }
 
             modal.classList.add('visible');
@@ -120,35 +149,12 @@ const InteractiveMap = ({ onReportClick, itemStatus, areaStatus }) => {
         };
 
         document.body.addEventListener('click', clickHandler);
-
-        // Update styles based on itemStatus
-        for (const itemId in itemStatus) {
-            const elements = document.querySelectorAll(`[data-id='${itemId}']`);
-            elements.forEach(element => {
-                if (itemStatus[itemId] === 'broken') {
-                    element.style.backgroundColor = '#ffcccc'; // Light red
-                } else {
-                    element.style.backgroundColor = ''; // Reset to default
-                }
-            });
-        }
-
-        // Update area styles based on areaStatus
-        for (const areaId in areaStatus) {
-            const element = document.getElementById(`${areaId}-box`) || document.getElementById(`${areaId}-container`);
-            if (element) {
-                const brokenPercentage = areaStatus[areaId];
-                const red = 255;
-                const green = 255 * (1 - brokenPercentage);
-                const blue = 255 * (1 - brokenPercentage);
-                element.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
-            }
-        }
+        applyStyles(); // Apply styles on initial render and when itemStatus/areaStatus change
 
         return () => {
             document.body.removeEventListener('click', clickHandler);
         };
-    }, [onReportClick, itemStatus, areaStatus]);
+    }, [onReportClick, applyStyles]);
 
     return (
         <div>

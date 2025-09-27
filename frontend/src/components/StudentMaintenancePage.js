@@ -24,28 +24,36 @@ const StudentMaintenancePage = () => {
 
     // Initialize item statuses
     useEffect(() => {
-        const allItems = [
-            'monitor-1', 'table-1', 'table-2', 'table-3a', 'table-4', 'monitor-3',
-            'bookshelf', 'room-1', 'monitor-2', 'printer-1', 'printer-2', 'room-2',
-            'room-1-door', 'room-1-tv', 'room-1-monitor-1', 'room-1-monitor-2',
-            'room-2-door', 'room-2-tv', 'room-2-monitor-1', 'room-2-monitor-2',
-            'printer-1-A', 'printer-1-B', 'printer-2-A', 'printer-2-B',
-            ...Array.from({ length: 5 }, (_, i) => `monitor-1-monitor-${i + 1}`),
-            ...Array.from({ length: 5 }, (_, i) => `monitor-3-monitor-${i + 1}`),
-            ...Array.from({ length: 20 }, (_, i) => `monitor-2-monitor-${i + 1}`)
-        ];
-        const initialStatus = allItems.reduce((acc, item) => {
-            acc[item] = 'working';
-            return acc;
-        }, {});
-        setItemStatus(initialStatus);
+        const savedItemStatus = JSON.parse(localStorage.getItem('itemStatus'));
+        const savedAreaStatus = JSON.parse(localStorage.getItem('areaStatus'));
 
-        const initialAreaStatus = Object.keys(areas).reduce((acc, areaId) => {
-            acc[areaId] = 0;
-            return acc;
-        }, {});
-        setAreaStatus(initialAreaStatus);
-    }, []);
+        if (savedItemStatus && savedAreaStatus) {
+            setItemStatus(savedItemStatus);
+            setAreaStatus(savedAreaStatus);
+        } else {
+            const allItems = [
+                'monitor-1', 'table-1', 'table-2', 'table-3a', 'table-4', 'monitor-3',
+                'bookshelf', 'room-1', 'monitor-2', 'printer-1', 'printer-2', 'room-2',
+                'room-1-door', 'room-1-tv', 'room-1-monitor-1', 'room-1-monitor-2',
+                'room-2-door', 'room-2-tv', 'room-2-monitor-1', 'room-2-monitor-2',
+                'printer-1-A', 'printer-1-B', 'printer-2-A', 'printer-2-B',
+                ...Array.from({ length: 5 }, (_, i) => `monitor-1-monitor-${i + 1}`),
+                ...Array.from({ length: 5 }, (_, i) => `monitor-3-monitor-${i + 1}`),
+                ...Array.from({ length: 20 }, (_, i) => `monitor-2-monitor-${i + 1}`)
+            ];
+            const initialStatus = allItems.reduce((acc, item) => {
+                acc[item] = 'working';
+                return acc;
+            }, {});
+            setItemStatus(initialStatus);
+
+            const initialAreaStatus = Object.keys(areas).reduce((acc, areaId) => {
+                acc[areaId] = 0;
+                return acc;
+            }, {});
+            setAreaStatus(initialAreaStatus);
+        }
+    }, [areas]);
 
     const handleReportClick = (objectId) => {
         setFormData(prevState => ({
@@ -82,6 +90,9 @@ const StudentMaintenancePage = () => {
             updatedAreaStatus[areaId] = brokenCount / areaItems.length;
         }
         setAreaStatus(updatedAreaStatus);
+
+        localStorage.setItem('itemStatus', JSON.stringify(updatedItemStatus));
+        localStorage.setItem('areaStatus', JSON.stringify(updatedAreaStatus));
 
         // Here you would typically send the report to the backend
         console.log('New report submitted:', newReport);
