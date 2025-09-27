@@ -1,0 +1,156 @@
+/* --- Basic Setup & Pretty Theme --- */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f4f7f9;
+    color: #2c3e50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0;
+}
+
+/* --- Main Diagram Container (CSS Grid) --- */
+#diagram-container {
+    display: grid;
+    grid-template-columns: 1.5fr 4px 1fr 1.5fr;
+    grid-template-rows: auto 4px 2fr 4px auto;
+    gap: 25px;
+    width: 90%;
+    max-width: 1100px;
+    min-height: 850px;
+    padding: 20px;
+}
+
+/* --- General Style for all Diagram Blocks --- */
+.diagram-box {
+    border: 1px solid #dde4e9;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1em;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(44, 62, 80, 0.1);
+    transition: all 0.3s ease;
+}
+
+.interactive { cursor: pointer; }
+.interactive:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(44, 62, 80, 0.15);
+    border-color: #3498db;
+}
+
+/* --- Positioning Each Block in the Grid --- */
+#monitor-1-box { grid-area: 1 / 1 / 2 / 2; height: 90px; }
+#top-wall { grid-area: 2 / 1 / 3 / 2; }
+#tables-container { 
+    grid-area: 3 / 1 / 4 / 2;
+    display: flex; flex-direction: column; gap: 20px;
+    border: none; background: none; box-shadow: none;
+}
+#tables-container .diagram-box { height: 110px; }
+#bottom-wall { grid-area: 4 / 1 / 5 / 2; }
+#monitor-3-box { grid-area: 5 / 1 / 6 / 2; height: 90px; }
+
+.wall { background-color: #e0e6ec; border-radius: 2px; }
+#vertical-wall { grid-area: 1 / 2 / 6 / 3; }
+
+#bookshelf-box { grid-area: 1 / 3 / 6 / 4; width: 160px; }
+
+#room-1-box { grid-area: 1 / 4 / 2 / 5; }
+#monitor-2-container {
+    grid-area: 2 / 4 / 5 / 5;
+    display: flex; flex-direction: column;
+    justify-content: space-between; align-items: center; padding: 20px;
+}
+.monitor-2-label { font-weight: 700; font-size: 1.2em; color: #7f8c8d; }
+#printer-1-box, #printer-2-box { width: 85%; height: 70px; }
+#room-2-box { grid-area: 5 / 4 / 6 / 5; }
+
+.icon {
+    width: 40px; height: 40px;
+    margin-bottom: 5px; fill: #2c3e50;
+}
+
+/* --- Modal Styles --- */
+.modal {
+    display: flex; visibility: hidden; opacity: 0; position: fixed; z-index: 1000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(44, 62, 80, 0.85);
+    justify-content: center; align-items: center;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.modal.visible { visibility: visible; opacity: 1; }
+.modal-content {
+    background-color: #ffffff; color: #2c3e50; border: 1px solid #dde4e9;
+    padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    text-align: center; position: relative;
+    transform: scale(0.95); transition: all 0.3s ease;
+    max-width: 1000px; width: 90%;
+}
+.modal.visible .modal-content { transform: scale(1); }
+.modal h2 { margin-top: 0; font-size: 1.8em; color: #34495e; }
+.modal-body { margin-top: 25px; padding: 15px; border: 1px dashed #bdc3c7; }
+.close-button {
+    position: absolute; top: 15px; right: 20px; color: #95a5a6;
+    font-size: 32px; font-weight: bold; cursor: pointer;
+    transition: color 0.2s ease;
+}
+.close-button:hover { color: #34495e; }
+.interactive-item {
+    background-color: #ecf0f1; border: 2px solid #bdc3c7;
+    border-radius: 6px; display: flex; justify-content: center; align-items: center;
+}
+.interactive-item:hover { background-color: #ffffff; border-color: #3498db; }
+
+#printer-modal .modal-body { display: flex; justify-content: space-around; align-items: center; min-height: 150px; }
+.printer-item { width: 100px; height: 100px; border-radius: 50%; }
+
+#monitor-vertical-modal .modal-body {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 15px; max-height: 70vh; overflow-y: auto; padding: 20px;
+}
+.monitor-item { width: 120px; height: 70px; font-weight: 600; }
+#monitor-horizontal-modal .modal-body { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+
+/* --- NEW: Styles for the Updated Room Layout inside the Modal --- */
+#modal-room-layout {
+    position: relative; width: 100%; height: 600px;
+    background-color: #ffffff;
+    box-sizing: border-box;
+}
+.room-item {
+    border: 2px solid #dde4e9; background-color: #f8f9fa;
+    border-radius: 8px; display: flex; justify-content: center; align-items: center;
+    font-weight: 600; font-size: 1.1em; position: absolute;
+}
+.room-item.interactive:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 15px rgba(44, 62, 80, 0.1);
+    border-color: #3498db;
+}
+#modal-tv:hover {
+    transform: translateY(-50%) translateY(-4px);
+}
+#modal-door {
+    top: 20px; left: -2px; width: 8px; height: 80px;
+    border-left: none; border-radius: 0 8px 8px 0;
+}
+#modal-door:hover { background-color: #ecf0f1; }
+#modal-tv {
+    width: 60px; height: 300px; left: 40px;
+    top: 50%; transform: translateY(-50%);
+}
+#modal-monitor-row {
+    display: flex; gap: 30px; position: absolute;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+.modal-monitor {
+    position: relative; width: 180px; height: 180px;
+}
