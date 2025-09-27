@@ -10,6 +10,7 @@ const InteractiveMap = ({ onReportClick, itemStatus, areaStatus, userType, onCle
     const [bookingStartTime, setBookingStartTime] = useState('');
     const [bookingEndTime, setBookingEndTime] = useState('');
     const [showBookingForm, setShowBookingForm] = useState(false);
+    const [currentModalRoomId, setCurrentModalRoomId] = useState(null); // State to track the room ID that opened the room-modal
 
     const getRemainingTime = (endTime) => {
         const now = new Date().getTime();
@@ -29,6 +30,7 @@ const InteractiveMap = ({ onReportClick, itemStatus, areaStatus, userType, onCle
     const hideModal = (modal) => {
         if (modal) modal.classList.remove('visible');
         setSelectedRoom(null); // Clear selected room when modal is hidden
+        setCurrentModalRoomId(null); // Clear currentModalRoomId when modal is hidden
         setShowBookingForm(false); // Hide booking form
         setBookingStartTime('');
         setBookingEndTime('');
@@ -163,7 +165,12 @@ const InteractiveMap = ({ onReportClick, itemStatus, areaStatus, userType, onCle
                 printerB.textContent = 'Printer B';
                 printerBody.appendChild(printerB);
             } else if (modalId === 'room-modal' && data && data.roomId) {
-                setSelectedRoom(data.roomId); // Set selected room for React state
+                setCurrentModalRoomId(data.roomId); // Always set the room that opened the modal
+                if (data.roomId === 'room-1' || data.roomId === 'room-2') {
+                    setSelectedRoom(data.roomId); // Only set selectedRoom for bookable rooms
+                } else {
+                    setSelectedRoom(null); // Clear selectedRoom for non-bookable rooms
+                }
                 setShowBookingForm(false); // Reset booking form state
                 const door = modal.querySelector('#modal-door');
                 const tv = modal.querySelector('#modal-tv');
@@ -184,7 +191,9 @@ const InteractiveMap = ({ onReportClick, itemStatus, areaStatus, userType, onCle
                 const clearButton = document.createElement('button');
                 clearButton.textContent = 'Clear';
                 clearButton.onclick = () => {
-                    onClearReportClick(data.objectId);
+                    if (data.objectId && itemStatus[data.objectId]) { // Ensure objectId is valid and exists in itemStatus
+                        onClearReportClick(data.objectId);
+                    }
                     hideModal(modal);
                     applyStyles(); // Re-apply styles after clearing report and hiding modal
                 };
@@ -306,8 +315,8 @@ const InteractiveMap = ({ onReportClick, itemStatus, areaStatus, userType, onCle
             <div id="room-modal" className="modal">
                 <div className="modal-content">
                     <span className="close-button" onClick={() => hideModal(document.getElementById('room-modal'))}>&times;</span>
-                    <h2>{selectedRoom === 'room-1' ? 'Room 1' : 'Room 2'}</h2>
-                    {selectedRoom && (selectedRoom === 'room-1' || selectedRoom === 'room-2') && ( // Only show booking header for room-1 and room-2
+                    <h2>{currentModalRoomId ? currentModalRoomId.replace('-', ' ') : 'Room Details'}</h2> {/* Use currentModalRoomId for title */}
+                    {selectedRoom && (selectedRoom === 'room-1' || selectedRoom === 'room-2') && ( // Only show booking header for bookable rooms
                         <div className="room-booking-header">
                             {(selectedRoom === 'room-1' && room1Booked) || (selectedRoom === 'room-2' && room2Booked) ? (
                                 <p>Booked, time remaining: {(selectedRoom === 'room-1' ? getRemainingTime(room1BookingEndTime) : getRemainingTime(room2BookingEndTime))}</p>
