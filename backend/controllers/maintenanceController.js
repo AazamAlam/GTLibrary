@@ -1,5 +1,5 @@
-import MaintenanceLog from "../models/maintenanceLogModel.js";
-import Equipment from "../models/equipmentModel.js";
+import MaintenanceLog from "../models/maintenanceLogModel.js"
+import Equipment from "../models/equimentModel.js";
 import Staff from "../models/staffModel.js";
 
 // ----------------- CREATE NEW LOG -----------------
