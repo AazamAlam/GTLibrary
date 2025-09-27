@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import './InteractiveMap.css';
 
-const InteractiveMap = ({ onReportClick, itemStatus, areaStatus }) => {
+const InteractiveMap = ({ onReportClick, itemStatus, areaStatus, userType, onClearReportClick }) => {
     const applyStyles = useCallback(() => {
         // Update styles based on itemStatus
         for (const itemId in itemStatus) {
@@ -94,6 +94,17 @@ const InteractiveMap = ({ onReportClick, itemStatus, areaStatus }) => {
                 monitor1.textContent = `${data.roomId.replace('-', ' ')} Monitor 1`;
                 monitor2.textContent = `${data.roomId.replace('-', ' ')} Monitor 2`;
                 applyStyles(); // Apply styles after setting data-id for room items
+            } else if (modalId === 'clear-report-modal' && data && data.objectId) {
+                const clearReportBody = modal.querySelector('.modal-body');
+                clearReportBody.innerHTML = `Are you sure you want to clear the report for <strong>${data.objectId}</strong>?`;
+                const clearButton = document.createElement('button');
+                clearButton.textContent = 'Clear';
+                clearButton.onclick = () => {
+                    onClearReportClick(data.objectId);
+                    hideModal(modal);
+                    applyStyles(); // Re-apply styles after clearing report and hiding modal
+                };
+                clearReportBody.appendChild(clearButton);
             }
 
             modal.classList.add('visible');
@@ -109,7 +120,9 @@ const InteractiveMap = ({ onReportClick, itemStatus, areaStatus }) => {
                 const targetType = interactiveElement.dataset.target;
                 const objectId = interactiveElement.dataset.id || interactiveElement.id;
                 
-                if (targetType.endsWith('-modal')) {
+                if (userType === 'employee' && itemStatus[objectId] === 'broken') {
+                    showModal('clear-report-modal', 'Clear Report', { objectId });
+                } else if (targetType.endsWith('-modal')) {
                     const modalTitle = interactiveElement.dataset.title || 'Details';
                     let data = {};
                     if (objectId.startsWith('monitor')) {
@@ -129,14 +142,22 @@ const InteractiveMap = ({ onReportClick, itemStatus, areaStatus }) => {
             if (event.target.closest('#modal-room-layout')) {
                 const roomItem = event.target.closest('.interactive');
                 if (roomItem) {
-                    sendToBackend(roomItem.dataset.id || roomItem.id);
+                    if (userType === 'employee' && itemStatus[roomItem.dataset.id || roomItem.id] === 'broken') {
+                        showModal('clear-report-modal', 'Clear Report', { objectId: roomItem.dataset.id || roomItem.id });
+                    } else {
+                        sendToBackend(roomItem.dataset.id || roomItem.id);
+                    }
                 }
                 return;
             }
             
             if (event.target.matches('.interactive-item')) {
                 const itemId = event.target.dataset.id;
-                sendToBackend(itemId);
+                if (userType === 'employee' && itemStatus[itemId] === 'broken') {
+                    showModal('clear-report-modal', 'Clear Report', { objectId: itemId });
+                } else {
+                    sendToBackend(itemId);
+                }
                 return;
             }
             
@@ -154,7 +175,7 @@ const InteractiveMap = ({ onReportClick, itemStatus, areaStatus }) => {
         return () => {
             document.body.removeEventListener('click', clickHandler);
         };
-    }, [onReportClick, applyStyles]);
+    }, [onReportClick, applyStyles, itemStatus, userType, onClearReportClick]);
 
     return (
         <div>
@@ -211,6 +232,7 @@ const InteractiveMap = ({ onReportClick, itemStatus, areaStatus }) => {
             <div id="printer-modal" className="modal"> <div className="modal-content"> <span className="close-button">&times;</span> <h2>Printer Area</h2> <div className="modal-body"></div> </div> </div>
             <div id="monitor-horizontal-modal" className="modal"> <div className="modal-content"> <span className="close-button">&times;</span> <h2>Monitor Area</h2> <div className="modal-body" id="horizontal-monitor-body"></div> </div> </div>
             <div id="monitor-vertical-modal" className="modal"> <div className="modal-content"> <span className="close-button">&times;</span> <h2>Monitor Area</h2> <div className="modal-body" id="vertical-monitor-body"></div> </div> </div>
+            <div id="clear-report-modal" className="modal"> <div className="modal-content"> <span className="close-button">&times;</span> <h2>Clear Report</h2> <div className="modal-body"></div> </div> </div>
         </div>
     );
 };

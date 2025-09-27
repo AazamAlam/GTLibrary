@@ -7,8 +7,11 @@ const HomePage = () => {
         <div>
             <h1>Welcome to the GT Library</h1>
             <p>This is the homepage.</p>
-            <Link to="/map">
-                <button>Go to Interactive Map</button>
+            <Link to="/map/student">
+                <button>Student</button>
+            </Link>
+            <Link to="/map/employee">
+                <button>Employee</button>
             </Link>
         </div>
     );

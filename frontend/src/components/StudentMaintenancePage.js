@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import InteractiveMap from './InteractiveMap';
 
 const StudentMaintenancePage = () => {
-    const [reports, setReports] = useState([]);
+    const { userType } = useParams();
+    const [reports, setReports] = useState(() => {
+        const savedReports = localStorage.getItem('reports');
+        return savedReports ? JSON.parse(savedReports) : [];
+    });
     const [isReportFormVisible, setIsReportFormVisible] = useState(false);
     const [formData, setFormData] = useState({
         objectType: '',
@@ -55,6 +60,10 @@ const StudentMaintenancePage = () => {
         }
     }, [areas]);
 
+    useEffect(() => {
+        localStorage.setItem('reports', JSON.stringify(reports));
+    }, [reports]);
+
     const handleReportClick = (objectId) => {
         setFormData(prevState => ({
             ...prevState,
@@ -105,13 +114,43 @@ const StudentMaintenancePage = () => {
         setIsReportFormVisible(false);
     };
 
+    const handleClearReport = (objectId) => {
+        const reportToClear = reports.find(report => report.objectType === objectId);
+        const updatedReports = reports.filter(report => report.id !== reportToClear.id);
+        setReports(updatedReports);
+
+        const updatedItemStatus = {
+            ...itemStatus,
+            [objectId]: 'working'
+        };
+        setItemStatus(updatedItemStatus);
+
+        const updatedAreaStatus = { ...areaStatus };
+        for (const areaId in areas) {
+            const areaItems = areas[areaId];
+            const brokenCount = areaItems.filter(item => updatedItemStatus[item] === 'broken').length;
+            updatedAreaStatus[areaId] = brokenCount / areaItems.length;
+        }
+        setAreaStatus(updatedAreaStatus);
+
+        localStorage.setItem('itemStatus', JSON.stringify(updatedItemStatus));
+        localStorage.setItem('areaStatus', JSON.stringify(updatedAreaStatus));
+        localStorage.setItem('reports', JSON.stringify(updatedReports));
+    };
+
     return (
         <div>
-            <h1>Student Maintenance Reporting</h1>
+            <h1>{userType === 'employee' ? 'Employee Maintenance Dashboard' : 'Student Maintenance Reporting'}</h1>
             
-            <InteractiveMap onReportClick={handleReportClick} itemStatus={itemStatus} areaStatus={areaStatus} />
+            <InteractiveMap
+                onReportClick={handleReportClick}
+                itemStatus={itemStatus}
+                areaStatus={areaStatus}
+                userType={userType}
+                onClearReportClick={handleClearReport}
+            />
 
-            {isReportFormVisible && (
+            {userType === 'student' && isReportFormVisible && ( // Only show report form for students
                 <div className="modal visible"> {/* Use the modal styles from InteractiveMap.css */}
                     <div className="modal-content">
                         <span className="close-button" onClick={handleCancel}>&times;</span>
@@ -157,11 +196,14 @@ const StudentMaintenancePage = () => {
             )}
 
             <div style={{ marginTop: '20px' }}>
-                <h2>Submitted Reports</h2>
+                <h2>{userType === 'employee' ? 'All Submitted Reports' : 'Your Submitted Reports'}</h2>
                 <ul>
                     {reports.map(report => (
                         <li key={report.id}>
                             <strong>{report.objectType}</strong> at {report.location}: {report.notes}
+                            {userType === 'employee' && ( // Only show clear button for employees
+                                <button onClick={() => handleClearReport(report.id, report.objectType)} style={{ marginLeft: '10px' }}>Clear Report</button>
+                            )}
                         </li>
                     ))}
                 </ul>
