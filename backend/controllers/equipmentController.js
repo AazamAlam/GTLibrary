@@ -1,4 +1,4 @@
-import Equipment from "../models/equipmentModel.js";
+import Equipment from "../models/equimentModel.js";
 
 // GET all equipment
 export const getAllEquipment = async (req, res) => {

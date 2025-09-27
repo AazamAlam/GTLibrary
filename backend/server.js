@@ -5,6 +5,12 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+// Import routers
+import authRoutes from "./routes/auth.js";
+import equipmentRoutes from "./routes/equipment.js";
+import roomRoutes from "./routes/room.js";
+import maintenanceRoutes from "./routes/maintenance.js";
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
