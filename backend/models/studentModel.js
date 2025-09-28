@@ -4,7 +4,7 @@ const studentSchema = new mongoose.Schema({
   studentId: { type: String, required: true, unique: true },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-
+  passwordHash: { type: String, required: true },  // store hashed passwords only!
 
   department: { type: String },
   year: { type: Number },

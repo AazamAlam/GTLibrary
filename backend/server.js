@@ -12,7 +12,7 @@ import roomRoutes from "./routes/room.js";
 import maintenanceRoutes from "./routes/maintenance.js";
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
 // Middleware
 app.use(cors());
@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
   res.send("Backend is running!");
 });
 
-// Mount routers
+// Mount routers - avoiding conflicts
 app.use("/api/auth", authRoutes);
 app.use("/api/equipment", equipmentRoutes);
 app.use("/api/rooms", roomRoutes);

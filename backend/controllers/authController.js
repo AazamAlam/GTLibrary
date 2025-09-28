@@ -22,7 +22,7 @@ export const registerStudent = async (req, res) => {
       studentId,
       name,
       email,
-      password: hashedPassword,
+      passwordHash: hashedPassword,
       department,
       year
     }); //creates a new obj in mongodb
@@ -76,7 +76,7 @@ export const login = async (req, res) => {
       const student = await Student.findOne({ email });
       if (!student) return res.status(401).json({ message: "Invalid email or password" });
 
-      const passwordMatch = await bcrypt.compare(password, student.password);
+  const passwordMatch = await bcrypt.compare(password, student.passwordHash);
       if (!passwordMatch) return res.status(401).json({ message: "Invalid email or password" });
 
       res.json({
