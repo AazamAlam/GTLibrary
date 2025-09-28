@@ -23,6 +23,12 @@ app.get("/", (req, res) => {
   res.send("Backend is running!");
 });
 
+// Mount routers
+app.use("/api/auth", authRoutes);
+app.use("/api/equipment", equipmentRoutes);
+app.use("/api/rooms", roomRoutes);
+app.use("/api/maintenance", maintenanceRoutes);
+
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB connected"))
