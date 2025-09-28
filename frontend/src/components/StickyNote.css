@@ -1,0 +1,150 @@
+.sticky-note-container {
+    display: inline-block;
+    margin: 20px;
+    filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.2));
+    transform: rotate(-1deg);
+}
+
+.sticky-note {
+    width: 220px;
+    height: 280px;
+    background: linear-gradient(150deg, #fef3a0 0%, #fef08a 50%, #fde047 100%);
+
+    /* background-image: url("./digital-sticky-notes-png.webp");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat; */
+
+    position: relative;
+    padding: 25px 20px 20px;
+    font-family: 'Verdana', cursive, sans-serif;
+    border-radius: 0 0 3px 3px;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.tape {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 20px;
+    background: linear-gradient(45deg, #e5e5e5 25%, transparent 25%), 
+                linear-gradient(-45deg, #e5e5e5 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #e5e5e5 75%), 
+                linear-gradient(-45deg, transparent 75%, #e5e5e5 75%);
+    background-size: 4px 4px;
+    background-position: 0 0, 0 2px, 2px -2px, -2px 0px;
+    background-color: #f0f0f0;
+    border-radius: 2px;
+    opacity: 0.8;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.sticky-note::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.2) 1px, transparent 0);
+    background-size: 20px 20px;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.sticky-note-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.sticky-title {
+    margin: 0 0 8px 0;
+    text-align: center;
+    color: #4a4a4a;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: underline;
+    text-decoration-color: #d4af37;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.field-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #5a5a5a;
+    margin: 0;
+}
+
+.sticky-input {
+    background: transparent;
+    border: none;
+    border-bottom: 2px dotted #d4af37;
+    font-family: 'Verdana', cursive, sans-serif;
+    font-size: 13px;
+    color: #333;
+    padding: 4px 2px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.sticky-input::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+.sticky-input:focus {
+    border-bottom-color: #b8860b;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.sticky-submit {
+    margin-top: auto;
+    background: #e6aa56;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 15px;
+    font-family: 'Verdana', cursive, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    align-self: center;
+}
+
+.sticky-submit:hover {
+    background: #ff5252;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.sticky-submit:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Additional hover effects for inputs */
+.sticky-input:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Make sure the form doesn't interfere with the paper texture */
+.sticky-note-content > * {
+    position: relative;
+    z-index: 2;
+}

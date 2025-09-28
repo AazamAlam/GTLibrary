@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/HomePage';
+<<<<<<< HEAD
 import StudentDashboard from './components/StudentDashboard';
 import EmployeeDashboard from './components/EmployeeDashboard';
 
@@ -15,6 +16,10 @@ const allDevices = {
   'monitor-2-container': ['printer-1', 'printer-2'], // Dynamic monitors will be handled in component
   'room-2-box': ['room-2-door', 'room-2-tv', 'room-2-monitor-1', 'room-2-monitor-2'],
 };
+=======
+import StudentMaintenancePage from './components/StudentMaintenancePage';
+import Bulletin from './components/Bulletin';
+>>>>>>> 5703a21fb13df8aca873673363735204751b387f
 
 function App() {
   const [itemStatus, setItemStatus] = useState({}); // Stores { itemId: { status: 'broken', notes: '...' } }
@@ -98,6 +103,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<HomePage />} />
+<<<<<<< HEAD
           <Route 
             path="/dashboard" 
             element={
@@ -122,6 +128,10 @@ function App() {
               />
             }
           />
+=======
+          <Route path="/map/:userType" element={<StudentMaintenancePage />} />
+          <Route path="/bulletin" element={<Bulletin />} />
+>>>>>>> 5703a21fb13df8aca873673363735204751b387f
         </Routes>
       </div>
     </Router>
