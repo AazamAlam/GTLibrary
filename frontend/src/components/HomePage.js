@@ -73,7 +73,7 @@ const HomePage = () => {
                   </li>
                 </ul>
               </div>
-              <Link to="/map/student" className="card-button-link">
+              <Link to="/dashboard" className="card-button-link">
                 <button
                   className="card-button student-card-button"
                 >
@@ -108,7 +108,7 @@ const HomePage = () => {
                   </li>
                 </ul>
               </div>
-              <Link to="/map/employee" className="card-button-link">
+              <Link to="/employee-dashboard" className="card-button-link">
                 <button
                   className="card-button employee-card-button"
                 >

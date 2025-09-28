@@ -1,15 +1,202 @@
-/* --- Basic Setup & Pretty Theme --- */
+/* StudentDashboard.css */
+
+/* Global styles for the page (from HomePage.css) */
 body {
     font-family: 'Inter', sans-serif;
     background-color: #f4f7f9;
     color: #2c3e50;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
     margin: 0;
 }
+
+.homepage-container {
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #fbbf24, #f59e0b, #d97706); /* from-yellow-400 via-yellow-500 to-amber-600 */
+    padding-left: 1rem; /* Add some padding to the sides */
+    padding-right: 1rem; /* Add some padding to the sides */
+}
+
+/* Navigation Bar (from HomePage.css) */
+.navbar {
+    background-color: rgba(255, 255, 255, 0.1); /* bg-white bg-opacity-10 */
+    backdrop-filter: blur(4px); /* backdrop-blur-sm */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* border-b border-white border-opacity-20 */
+}
+
+.navbar-content {
+    max-width: 100%; /* Fill available width */
+    margin-left: auto; /* Center the content */
+    margin-right: auto; /* Center the content */
+    padding: 1rem 2rem; /* Add more horizontal padding */
+}
+
+.navbar-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4rem; /* h-16 */
+}
+
+.navbar-logo-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* space-x-3 */
+}
+
+.navbar-logo-icon-wrapper {
+    width: 2.5rem; /* w-10 */
+    height: 2.5rem; /* h-10 */
+    background-color: white;
+    border-radius: 9999px; /* rounded-full */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+}
+
+.navbar-logo-icon {
+    font-size: 1.25rem; /* text-xl */
+}
+
+.navbar-title {
+    color: white;
+    font-weight: 700; /* font-bold */
+    font-size: 1.25rem; /* text-xl */
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem; /* space-x-6 */
+    color: white;
+}
+
+.navbar-link {
+    color: white;
+    transition-property: color; /* transition-colors */
+    transition-duration: 150ms; /* duration-150 */
+}
+.navbar-link:hover {
+    color: #fcd34d; /* hover:text-yellow-200 */
+}
+
+@media (max-width: 768px) { /* Adjust for smaller screens */
+    .navbar-flex {
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+        padding-bottom: 1rem; /* Add some space below when stacked */
+    }
+    .navbar-links {
+        margin-top: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    .navbar-content { /* Add padding to navbar-content within media query */
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+/* Main Content Section (from HomePage.css) */
+.main-content-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem; /* Increased horizontal padding */
+    width: 100%; /* Ensure it fills the width */
+}
+
+.main-content-container {
+    max-width: 100%; /* Fill available width */
+    width: 100%;
+    margin-left: auto; /* Center the content */
+    margin-right: auto; /* Center the content */
+    padding: 0 2rem; /* Add horizontal padding */
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+/* Dashboard Layout for two containers */
+.dashboard-layout {
+    display: flex;
+    gap: 2rem; /* Space between the two containers */
+    /* Removed flex-wrap: wrap; */
+    /* Removed justify-content: center; */
+}
+
+.map-section-container {
+    flex: 0 0 1140px; /* Fixed width for the map container (map width + padding) */
+    height: 1000px; /* Fixed height to accommodate the map (map height + padding + extra margin) */
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 20px; /* Increased padding */
+    display: flex;
+    flex-direction: column;
+    /* Removed align-items: center; and gap: 1rem; */
+}
+
+.map-section-container h3 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.map-scale-wrapper {
+    width: 1100px; /* Original width of the diagram-container */
+    height: 850px; /* Original height of the diagram-container */
+    /* Removed overflow: hidden; as the container will now fit the content */
+    /* Removed transform: scale(); as the map should be full size */
+    transform-origin: top left;
+}
+
+.blank-container {
+    flex: 1; /* Allow it to grow and shrink */
+    min-width: 300px; /* Minimum width for the blank container */
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #4b5563;
+}
+
+/* Footer (from HomePage.css) */
+.footer {
+    background-color: rgba(0, 0, 0, 0.2); /* bg-black bg-opacity-20 */
+    backdrop-filter: blur(4px); /* backdrop-blur-sm */
+    border-top: 1px solid rgba(255, 255, 255, 0.2); /* border-t border-white border-opacity-20 */
+    padding-top: 1.5rem; /* py-6 */
+    padding-bottom: 1.5rem; /* py-6 */
+}
+
+.footer-content {
+    max-width: 100%; /* Fill available width */
+    width: 100%;
+    margin-left: auto; /* Center the content */
+    margin-right: auto; /* Center the content */
+    padding: 1rem 2rem; /* Add more horizontal padding */
+    text-align: center;
+    color: white;
+}
+
+/* --- Basic Setup & Pretty Theme --- */
+/* body is already defined above */
 
 /* --- Main Diagram Container (CSS Grid) --- */
 #diagram-container {
@@ -21,12 +208,13 @@ body {
     max-width: 1100px;
     min-height: 850px;
     padding: 20px;
+    /* Removed previous background, border, shadow as they are now in map-scale-wrapper */
 }
 
 /* --- General Style for all Diagram Blocks --- */
 .diagram-box {
     border: 1px solid #dde4e9;
-    background-color: #ffffff;
+    background-color: transparent;
     display: flex;
     flex-direction: column; 
     justify-content: center;
@@ -110,7 +298,9 @@ body {
 .interactive-item:hover { background-color: #ffffff; border-color: #3498db; }
 
 #printer-modal .modal-body { display: flex; justify-content: space-around; align-items: center; min-height: 150px; }
-.printer-item { width: 100px; height: 100px; border-radius: 50%; }
+.printer-item {
+    width: 100px; height: 100px; border-radius: 50%;
+}
 
 #monitor-vertical-modal .modal-body {
     display: grid; grid-template-columns: repeat(2, 1fr);
@@ -213,4 +403,34 @@ body {
 
 .booking-form button:hover {
     background-color: #2980b9;
+}
+
+/* Report Issue Modal Styles */
+#report-issue-modal .modal-content {
+    max-width: 600px;
+}
+
+#report-issue-modal textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    font-size: 1em;
+    resize: vertical;
+}
+
+#report-issue-modal button {
+    background-color: #e74c3c; /* Red for report button */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s ease;
+}
+
+#report-issue-modal button:hover {
+    background-color: #c0392b;
 }
