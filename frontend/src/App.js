@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import StudentDashboard from './components/StudentDashboard';
 import EmployeeDashboard from './components/EmployeeDashboard';
 import Bulletin from './components/Bulletin';
-import SignupAdmin from "./components/SignupAdmin";
+import AdminSignup from "./components/AdminSignup"; // Corrected import
+import StudentSignup from "./components/StudentSignup";
+import LoginPage from "./components/LoginPage";
+import Navbar from "./components/Navbar";
 
 // Define a mapping of areas to their contained devices
 const allDevices = {
@@ -21,6 +24,8 @@ const allDevices = {
 function App() {
   const [itemStatus, setItemStatus] = useState({}); // Stores { itemId: { status: 'broken', notes: '...' } }
   const [areaStatus, setAreaStatus] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState(null);
 
   // Effect to calculate areaStatus whenever itemStatus changes
   useEffect(() => {
@@ -81,6 +86,31 @@ function App() {
     setAreaStatus(newAreaStatus);
   }, [itemStatus]);
 
+  // Authentication state management
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('userRole');
+    if (token && role) {
+      setIsLoggedIn(true);
+      setUserRole(role);
+    }
+  }, []);
+
+  const handleLogin = (token, role) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('userRole', role);
+    setIsLoggedIn(true);
+    setUserRole(role);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userRole');
+    setIsLoggedIn(false);
+    setUserRole(null);
+    // navigate('/'); // Redirect to home after logout - handled by Navbar now
+  };
+
   const handleReportClick = (itemId, notes) => {
     console.log(`Reporting item: ${itemId} with notes: ${notes}`);
     setItemStatus(prevStatus => ({ ...prevStatus, [itemId]: { status: 'broken', notes: notes } }));
@@ -95,48 +125,43 @@ function App() {
     });
   };
 
-  const handleLoginSuccess = () => {
-    // Handle successful login - navigate to admin dashboard or desired page
-    console.log('Admin login successful');
-    // You can add navigation logic here, like:
-    // window.location.href = '/admin-dashboard';
-    // or if you have an admin dashboard route, you could navigate there
-  };
-
   return (
-    <Router>
-      <div className="App">
+    <div className="App">
+      <Navbar isLoggedIn={isLoggedIn} userRole={userRole} onLogout={handleLogout} />
+      <div className="container mx-auto px-4">
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route 
-            path="/dashboard" 
-            element={
-              <StudentDashboard 
-                onReportClick={handleReportClick}
-                itemStatus={itemStatus}
-                areaStatus={areaStatus}
-                userType={'student'}
-                onClearReportClick={handleClearReportClick}
-              />
-            }
-          />
-          <Route 
-            path="/employee-dashboard" 
-            element={
-              <EmployeeDashboard 
-                onReportClick={handleReportClick}
-                itemStatus={itemStatus}
-                areaStatus={areaStatus}
-                userType={'employee'}
-                onClearReportClick={handleClearReportClick}
-              />
-            }
-          />
-          <Route path="/bulletin/" element={<Bulletin />}/>
-          <Route path="/SignupAdmin" element={<SignupAdmin onLoginSuccess={handleLoginSuccess} />} />
-        </Routes>
+        <Route path="/" element={<HomePage isLoggedIn={isLoggedIn} userRole={userRole} />} />
+        <Route 
+          path="/dashboard" 
+          element={
+            <StudentDashboard 
+              onReportClick={handleReportClick}
+              itemStatus={itemStatus}
+              areaStatus={areaStatus}
+              userType={'student'}
+              onClearReportClick={handleClearReportClick}
+            />
+          }
+        />
+        <Route 
+          path="/employee-dashboard" 
+          element={
+            <EmployeeDashboard 
+              onReportClick={handleReportClick}
+              itemStatus={itemStatus}
+              areaStatus={areaStatus}
+              userType={'employee'}
+              onClearReportClick={handleClearReportClick}
+            />
+          }
+        />
+        <Route path="/bulletin/" element={<Bulletin />}/>
+        <Route path="/admin-signup" element={<AdminSignup />} />
+        <Route path="/student-signup" element={<StudentSignup />} />
+        <Route path="/login" element={<LoginPage onLoginSuccess={handleLogin} />} />
+      </Routes>
       </div>
-    </Router>
+    </div>
   );
 }
 

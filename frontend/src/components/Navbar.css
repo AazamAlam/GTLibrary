@@ -1,0 +1,106 @@
+/* Navbar.css */
+
+.navbar {
+    background-color: #343a40; /* Dark gray for visibility */
+    backdrop-filter: blur(4px); /* backdrop-blur-sm */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* border-b border-white border-opacity-20 */
+}
+
+.navbar-content {
+    max-width: 100%; /* Fill available width */
+    margin-left: auto; /* Center the content */
+    margin-right: auto; /* Center the content */
+    padding: 1rem 2rem; /* Add more horizontal padding */
+}
+
+.navbar-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4rem; /* h-16 */
+}
+
+.navbar-logo-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* space-x-3 */
+}
+
+.navbar-logo-icon-wrapper {
+    width: 2.5rem; /* w-10 */
+    height: 2.5rem; /* h-10 */
+    background-color: white;
+    border-radius: 9999px; /* rounded-full */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+}
+
+.navbar-logo-icon {
+    font-size: 1.25rem; /* text-xl */
+}
+
+.navbar-title {
+    color: white;
+    font-weight: 700; /* font-bold */
+    font-size: 1.25rem; /* text-xl */
+    text-decoration: none;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem; /* space-x-6 */
+    color: white;
+}
+
+.navbar-link {
+    color: white;
+    transition-property: color; /* transition-colors */
+    transition-duration: 150ms; /* duration-150 */
+    text-decoration: none;
+}
+.navbar-link:hover {
+    color: #fcd34d; /* hover:text-yellow-200 */
+}
+
+.navbar-user-info {
+  color: white;
+  margin-right: 1rem;
+  font-size: 1rem;
+}
+
+.navbar-button {
+  color: white;
+  transition-property: color; /* transition-colors */
+  transition-duration: 150ms; /* duration-150 */
+  background-color: transparent; /* Make button background transparent */
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: none; /* For Link component */
+}
+
+.navbar-button:hover {
+  color: #fcd34d; /* hover:text-yellow-200 */
+}
+
+@media (max-width: 768px) { /* Adjust for smaller screens */
+    .navbar-flex {
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+        padding-bottom: 1rem; /* Add some space below when stacked */
+    }
+    .navbar-links {
+        margin-top: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    .navbar-content { /* Add padding to navbar-content within media query */
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
