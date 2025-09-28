@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './StudentDashboard.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const StudentDashboard = ({ onReportClick, itemStatus, areaStatus, userType, onClearReportClick }) => {
+    const navigate = useNavigate();
     const [selectedRoom, setSelectedRoom] = useState(null);
     const [room1Booked, setRoom1Booked] = useState(false);
     const [room2Booked, setRoom2Booked] = useState(false);
@@ -346,8 +347,10 @@ const StudentDashboard = ({ onReportClick, itemStatus, areaStatus, userType, onC
                             </div>
                         </div>
                         <div className="blank-container">
-                            <h2>Additional Information</h2>
+                            <h2>Social/Study Bulletin</h2>
                             <p>This area can be used for other dashboard widgets or information.</p>
+                            <img src="/sample-board.png" alt="Sample Bulletin Board" className="sample-bulletin-image" />
+                            <button className="bulletin-redirect-btn" onClick={() => navigate('/bulletin')}>Go to Bulletin</button>
                         </div>
                     </div>
                 </div>
