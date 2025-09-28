@@ -101,12 +101,12 @@ const EmployeeDashboard = ({ onReportClick, itemStatus, areaStatus, userType, on
 
         // 2. Apply area background colors
         for (const areaId in areaStatus) {
-            const element = document.getElementById(`${areaId}-box`) || document.getElementById(`${areaId}-container`);
+            const element = document.getElementById(areaId);
             if (element) {
                 const brokenPercentage = areaStatus[areaId];
-                const red = 200 + (55 * brokenPercentage);
-                const green = 200 * (1 - brokenPercentage);
-                const blue = 200 * (1 - brokenPercentage);
+                const red = 255;
+                const green = Math.round(255 * (1 - brokenPercentage));
+                const blue = Math.round(255 * (1 - brokenPercentage));
                 element.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
             }
         }

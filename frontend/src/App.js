@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import StudentDashboard from './components/StudentDashboard';
 import EmployeeDashboard from './components/EmployeeDashboard';
@@ -20,6 +20,20 @@ const allDevices = {
   'monitor-2-container': ['printer-1', 'printer-2'], // Dynamic monitors will be handled in component
   'room-2-box': ['room-2-door', 'room-2-tv', 'room-2-monitor-1', 'room-2-monitor-2'],
 };
+
+const Layout = ({ children, isLoggedIn, userRole, onLogout }) => {
+  const location = useLocation();
+  const showNavbar = !['/dashboard', '/employee-dashboard'].includes(location.pathname);
+
+  return (
+    <div className="App">
+      {showNavbar && <Navbar isLoggedIn={isLoggedIn} userRole={userRole} onLogout={onLogout} />}
+      <div className="container mx-auto px-4">
+        {children}
+      </div>
+    </div>
+  );
+}
 
 function App() {
   const [itemStatus, setItemStatus] = useState({}); // Stores { itemId: { status: 'broken', notes: '...' } }
@@ -126,42 +140,39 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <Navbar isLoggedIn={isLoggedIn} userRole={userRole} onLogout={handleLogout} />
-      <div className="container mx-auto px-4">
-        <Routes>
-        <Route path="/" element={<HomePage isLoggedIn={isLoggedIn} userRole={userRole} />} />
-        <Route 
-          path="/dashboard" 
-          element={
-            <StudentDashboard 
-              onReportClick={handleReportClick}
-              itemStatus={itemStatus}
-              areaStatus={areaStatus}
-              userType={'student'}
-              onClearReportClick={handleClearReportClick}
-            />
-          }
-        />
-        <Route 
-          path="/employee-dashboard" 
-          element={
-            <EmployeeDashboard 
-              onReportClick={handleReportClick}
-              itemStatus={itemStatus}
-              areaStatus={areaStatus}
-              userType={'employee'}
-              onClearReportClick={handleClearReportClick}
-            />
-          }
-        />
-        <Route path="/bulletin/" element={<Bulletin />}/>
-        <Route path="/admin-signup" element={<AdminSignup />} />
-        <Route path="/student-signup" element={<StudentSignup />} />
-        <Route path="/login" element={<LoginPage onLoginSuccess={handleLogin} />} />
-      </Routes>
-      </div>
-    </div>
+    <Layout isLoggedIn={isLoggedIn} userRole={userRole} onLogout={handleLogout}>
+      <Routes>
+      <Route path="/" element={<HomePage isLoggedIn={isLoggedIn} userRole={userRole} />} />
+      <Route 
+        path="/dashboard" 
+        element={
+          <StudentDashboard 
+            onReportClick={handleReportClick}
+            itemStatus={itemStatus}
+            areaStatus={areaStatus}
+            userType={'student'}
+            onClearReportClick={handleClearReportClick}
+          />
+        }
+      />
+      <Route 
+        path="/employee-dashboard" 
+        element={
+          <EmployeeDashboard 
+            onReportClick={handleReportClick}
+            itemStatus={itemStatus}
+            areaStatus={areaStatus}
+            userType={'employee'}
+            onClearReportClick={handleClearReportClick}
+          />
+        }
+      />
+      <Route path="/bulletin/" element={<Bulletin />}/>
+      <Route path="/admin-signup" element={<AdminSignup />} />
+      <Route path="/student-signup" element={<StudentSignup />} />
+      <Route path="/login" element={<LoginPage onLoginSuccess={handleLogin} />} />
+    </Routes>
+    </Layout>
   );
 }
 
