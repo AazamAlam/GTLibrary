@@ -10,7 +10,7 @@ const generateToken = (id, role) => {
 
 // ----------------- STUDENT REGISTRATION -----------------
 export const registerStudent = async (req, res) => {
-  const { studentId, name, email, password, department, year } = req.body;
+  const { studentId, name, email, password, year } = req.body;
 
   try {
     const studentExists = await Student.findOne({ email });
@@ -23,7 +23,6 @@ export const registerStudent = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      department,
       year
     }); //creates a new obj in mongodb
 
@@ -40,23 +39,29 @@ export const registerStudent = async (req, res) => {
 
 // ----------------- STAFF REGISTRATION -----------------
 export const registerStaff = async (req, res) => {
-  const { username, password, role } = req.body;
+  const { firstName, lastName, email, password, employeeId, role } = req.body;
 
   try {
-    const staffExists = await Staff.findOne({ username });
+    const staffExists = await Staff.findOne({ email });
     if (staffExists) return res.status(400).json({ message: "Staff already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const staff = await Staff.create({
-      username,
+      firstName,
+      lastName,
+      email,
       passwordHash: hashedPassword,
+      employeeId,
       role: role || "staff"
     });
 
     res.status(201).json({
       _id: staff._id,
-      username: staff.username,
+      firstName: staff.firstName,
+      lastName: staff.lastName,
+      email: staff.email,
+      employeeId: staff.employeeId,
       role: staff.role,
       token: generateToken(staff._id, staff.role),
     });
@@ -88,16 +93,16 @@ export const login = async (req, res) => {
       });
 
     } else if (type === "staff") {
-      const { username, password } = req.body;
-      const staff = await Staff.findOne({ username });
-      if (!staff) return res.status(401).json({ message: "Invalid username or password" });
+      const { email, password } = req.body;
+      const staff = await Staff.findOne({ email });
+      if (!staff) return res.status(401).json({ message: "Invalid email or password" });
 
       const passwordMatch = await bcrypt.compare(password, staff.passwordHash);
-      if (!passwordMatch) return res.status(401).json({ message: "Invalid username or password" });
+      if (!passwordMatch) return res.status(401).json({ message: "Invalid email or password" });
 
       res.json({
         _id: staff._id,
-        username: staff.username,
+        email: staff.email,
         role: staff.role,
         token: generateToken(staff._id, staff.role),
       });

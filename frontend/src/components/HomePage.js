@@ -1,29 +1,56 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './HomePage.css'; // Import the new CSS file
 
-const HomePage = () => {
-  return (
-    <div className="homepage-container">
-      {/* 네비게이션 바 */}
-      <nav className="navbar">
-        <div className="navbar-content">
-          <div className="navbar-flex">
-            <div className="navbar-logo-group">
-              <div className="navbar-logo-icon-wrapper">
-                <span className="navbar-logo-icon">📚</span>
-              </div>
-              <span className="navbar-title">GT Library</span>
-            </div>
-            <div className="navbar-links">
-              <a href="#" className="navbar-link">About</a>
-              <a href="#" className="navbar-link">Contact</a>
-              <a href="#" className="navbar-link">Help</a>
-            </div>
-          </div>
-        </div>
-      </nav>
+const HomePage = ({ isLoggedIn, userRole }) => {
+  const navigate = useNavigate();
+  const [popup, setPopup] = useState(null);
+  const homepageContainerRef = useRef(null);
 
+  const showPopup = (message, type, buttonRef) => {
+    if (!buttonRef.current || !homepageContainerRef.current) return;
+    const buttonRect = buttonRef.current.getBoundingClientRect();
+    const containerRect = homepageContainerRef.current.getBoundingClientRect();
+
+    setPopup({
+      message,
+      type,
+      style: {
+        top: buttonRect.top - containerRect.top - 40, // Position above the button, relative to container
+        left: buttonRect.left - containerRect.left + buttonRect.width / 2,
+        transform: 'translateX(-50%)',
+      },
+    });
+    setTimeout(() => setPopup(null), 3000); // Hide after 3 seconds
+  };
+
+  const studentButtonRef = useRef(null);
+  const employeeButtonRef = useRef(null);
+
+  const handleStudentPortalClick = () => {
+    if (!isLoggedIn) {
+      showPopup('Please log in to access the student portal. Redirecting to student registration...', 'warning', studentButtonRef);
+      setTimeout(() => navigate('/student-signup'), 1500); // Redirect after popup shows
+    } else if (userRole === 'student') {
+      navigate('/dashboard');
+    } else {
+      showPopup('Wrong role! You are logged in as an employee.', 'error', studentButtonRef);
+    }
+  };
+
+  const handleEmployeePortalClick = () => {
+    if (!isLoggedIn) {
+      showPopup('Please log in to access the employee portal. Redirecting to employee registration...', 'warning', employeeButtonRef);
+      setTimeout(() => navigate('/admin-signup'), 1500); // Redirect after popup shows
+    } else if (userRole === 'admin' || userRole === 'staff') {
+      navigate('/employee-dashboard');
+    } else {
+      showPopup('Wrong role! You are logged in as a student.', 'error', employeeButtonRef);
+    }
+  };
+
+  return (
+    <div className="homepage-container" ref={homepageContainerRef}>
       {/* 메인 컨텐츠 */}
       <div className="main-content-wrapper">
         <div className="main-content-container">
@@ -73,13 +100,13 @@ const HomePage = () => {
                   </li>
                 </ul>
               </div>
-              <Link to="/dashboard" className="card-button-link">
-                <button
-                  className="card-button student-card-button"
-                >
-                  Enter as Student
-                </button>
-              </Link>
+              <button
+                className="card-button student-card-button"
+                onClick={handleStudentPortalClick}
+                ref={studentButtonRef}
+              >
+                Enter as Student
+              </button>
             </div>
 
             {/* 직원 카드 */}
@@ -108,13 +135,13 @@ const HomePage = () => {
                   </li>
                 </ul>
               </div>
-              <Link to="/employee-dashboard" className="card-button-link">
-                <button
-                  className="card-button employee-card-button"
-                >
-                  Enter as Employee
-                </button>
-              </Link>
+              <button
+                className="card-button employee-card-button"
+                onClick={handleEmployeePortalClick}
+                ref={employeeButtonRef}
+              >
+                Enter as Employee
+              </button>
             </div>
           </div>
 
@@ -141,6 +168,26 @@ const HomePage = () => {
         </div>
       </div>
 
+      {/* Popup Message */}
+      {popup && (
+        <div
+          className={`popup-message ${popup.type}`}
+          style={{
+            position: 'absolute',
+            zIndex: 1000,
+            padding: '8px 15px',
+            borderRadius: '5px',
+            color: 'white',
+            textAlign: 'center',
+            fontSize: '0.9rem',
+            ...popup.style,
+            backgroundColor: popup.type === 'warning' ? '#ffc107' : '#dc3545', // Yellow for warning, Red for error
+          }}
+        >
+          {popup.message}
+        </div>
+      )}
+
       {/* 푸터 */}
       <footer className="footer">
         <div className="footer-content">
@@ -149,6 +196,6 @@ const HomePage = () => {
       </footer>
     </div>
   );
-}
+};
 
 export default HomePage;
