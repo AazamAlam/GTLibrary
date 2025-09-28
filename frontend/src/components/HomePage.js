@@ -144,7 +144,7 @@ const HomePage = () => {
       {/* 푸터 */}
       <footer className="footer">
         <div className="footer-content">
-          <p>&copy; 2024 Georgia Tech Library. Built for GT Hackathon.</p>
+          <p>&copy; 2025 Georgia Tech Library. Built for GT Hackathon.</p>
         </div>
       </footer>
     </div>
