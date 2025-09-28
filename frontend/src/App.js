@@ -5,6 +5,7 @@ import HomePage from './components/HomePage';
 import StudentDashboard from './components/StudentDashboard';
 import EmployeeDashboard from './components/EmployeeDashboard';
 import Bulletin from './components/Bulletin';
+import SignupAdmin from "./components/SignupAdmin";
 
 // Define a mapping of areas to their contained devices
 const allDevices = {
@@ -92,6 +93,13 @@ function App() {
       delete newStatus[itemId];
       return newStatus;
     });
+
+  const handleLoginSuccess = () => {
+    // Handle successful login - navigate to admin dashboard or desired page
+    console.log('Admin login successful');
+    // You can add navigation logic here, like:
+    // window.location.href = '/admin-dashboard';
+    // or if you have an admin dashboard route, you could navigate there
   };
 
   return (
@@ -124,6 +132,7 @@ function App() {
             }
           />
           <Route path="/bulletin/" element={<Bulletin />}/>
+          <Route path="/SignupAdmin" element={<SignupAdmin onLoginSuccess={handleLoginSuccess} />} />
         </Routes>
       </div>
     </Router>
