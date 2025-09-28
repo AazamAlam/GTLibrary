@@ -348,7 +348,7 @@ const StudentDashboard = ({ onReportClick, itemStatus, areaStatus, userType, onC
                         </div>
                         <div className="blank-container">
                             <h2>Social/Study Bulletin</h2>
-                            <p>This area can be used for other dashboard widgets or information.</p>
+                            <p> </p>
                             <img src="/sample-board.png" alt="Sample Bulletin Board" className="sample-bulletin-image" />
                             <button className="bulletin-redirect-btn" onClick={() => navigate('/bulletin')}>Go to Bulletin</button>
                         </div>
