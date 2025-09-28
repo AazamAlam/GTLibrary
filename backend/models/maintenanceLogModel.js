@@ -7,9 +7,9 @@ const maintenanceLogSchema = new mongoose.Schema({
     required: true 
   },
   date: { type: Date, default: Date.now },
-  performedBy: { type: String, ref: "Staff", required: true}, //alllows this to be populated by a staff object
+  performedBy: { type: String, ref: "Staff"}, //alllows this to be populated by a staff object
   notes: { type: String },
-  action: { type: String, enum: ["Repaired", "Inspected", "Checked", "Replaced"], required: true }
+  action: { type: String, enum: ["Repaired", "Inspected", "Checked", "Replaced", "Reported"], required: true }
 });
 
 export default mongoose.model("MaintenanceLog", maintenanceLogSchema);

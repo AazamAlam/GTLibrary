@@ -4,22 +4,16 @@ import Staff from "../models/staffModel.js";
 
 // ----------------- CREATE NEW LOG -----------------
 export const createLog = async (req, res) => {
-  const { equipmentId, action, performedBy, notes } = req.body;
+  const { equipmentName, action, performedBy, notes } = req.body;
 
   try {
-    const equipment = await Equipment.findById(equipmentId);
+    const equipment = await Equipment.findOne({ name: equipmentName });
     if (!equipment) return res.status(404).json({ message: "Equipment not found" });
 
-    let staff = null;
-    if (performedBy) {
-      staff = await Staff.findById(performedBy);
-      if (!staff) return res.status(404).json({ message: "Staff not found" });
-    }
-
     const log = await MaintenanceLog.create({
-      equipmentId,
+      equipmentId: equipment._id,
       action,
-      performedBy: performedBy || null, // store staff ID if using reference
+      performedBy: performedBy || "student", // store staff ID if using reference
       notes
     });
 

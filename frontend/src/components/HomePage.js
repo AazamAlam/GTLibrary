@@ -28,25 +28,11 @@ const HomePage = ({ isLoggedIn, userRole }) => {
   const employeeButtonRef = useRef(null);
 
   const handleStudentPortalClick = () => {
-    if (!isLoggedIn) {
-      showPopup('Please log in to access the student portal. Redirecting to student registration...', 'warning', studentButtonRef);
-      setTimeout(() => navigate('/student-signup'), 1500); // Redirect after popup shows
-    } else if (userRole === 'student') {
-      navigate('/dashboard');
-    } else {
-      showPopup('Wrong role! You are logged in as an employee.', 'error', studentButtonRef);
-    }
+    navigate('/dashboard');
   };
 
   const handleEmployeePortalClick = () => {
-    if (!isLoggedIn) {
-      showPopup('Please log in to access the employee portal. Redirecting to employee registration...', 'warning', employeeButtonRef);
-      setTimeout(() => navigate('/admin-signup'), 1500); // Redirect after popup shows
-    } else if (userRole === 'admin' || userRole === 'staff') {
-      navigate('/employee-dashboard');
-    } else {
-      showPopup('Wrong role! You are logged in as a student.', 'error', employeeButtonRef);
-    }
+    navigate('/employee-dashboard');
   };
 
   return (
