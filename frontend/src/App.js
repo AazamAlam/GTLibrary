@@ -128,7 +128,8 @@ function App() {
   return (
     <div className="App">
       <Navbar isLoggedIn={isLoggedIn} userRole={userRole} onLogout={handleLogout} />
-      <Routes>
+      <div className="container mx-auto px-4">
+        <Routes>
         <Route path="/" element={<HomePage isLoggedIn={isLoggedIn} userRole={userRole} />} />
         <Route 
           path="/dashboard" 
@@ -159,6 +160,7 @@ function App() {
         <Route path="/student-signup" element={<StudentSignup />} />
         <Route path="/login" element={<LoginPage onLoginSuccess={handleLogin} />} />
       </Routes>
+      </div>
     </div>
   );
 }

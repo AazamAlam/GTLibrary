@@ -104,7 +104,7 @@
 .main-content-container {
     max-width: 100%; /* Fill available width */
     width: 100%;
-    margin-left: auto; /* Center the content */
+    margin-left: -5rem; /* Shift left */
     margin-right: auto; /* Center the content */
     padding: 0 2rem; /* Add horizontal padding */
 }
@@ -163,6 +163,7 @@
     display: grid;
     gap: 2rem; /* gap-8 */
     margin-bottom: 3rem; /* mb-12 */
+    justify-items: start;
 }
 @media (min-width: 768px) { /* md:grid-cols-2 */
     .main-selection-grid {
