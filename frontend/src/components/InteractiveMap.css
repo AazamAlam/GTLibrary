@@ -154,3 +154,63 @@ body {
 .modal-monitor {
     position: relative; width: 180px; height: 180px;
 }
+
+/* Booking Indicator */
+.booking-indicator {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 12px;
+    height: 12px;
+    background-color: #27ae60; /* Green color */
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Booking Form within Modal */
+.booking-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.booking-form div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 80%;
+    max-width: 300px;
+}
+
+.booking-form label {
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #34495e;
+}
+
+.booking-form input[type="time"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.booking-form button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s ease;
+    margin-top: 10px;
+}
+
+.booking-form button:hover {
+    background-color: #2980b9;
+}
