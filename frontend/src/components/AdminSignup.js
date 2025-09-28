@@ -8,24 +8,35 @@ function AdminSignup() {
   const [password, setPassword] = useState('');
   const [employeeId, setEmployeeId] = useState('');
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage(''); // Clear previous messages
+    setMessage('');
+    setIsLoading(true);
 
     try {
-      const response = await fetch('/api/auth/register/staff', {
+      // Use the correct backend URL structure
+      const response = await fetch('http://localhost:4000/api/auth/register/staff', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ firstName, lastName, email, password, employeeId, role: 'admin' }),
+        body: JSON.stringify({ 
+          firstName, 
+          lastName, 
+          email, 
+          password, 
+          employeeId, 
+          role: 'admin' 
+        }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setMessage(data.message || 'Admin registration successful!');
+        setMessage('Admin registration successful!');
+        // Clear form
         setFirstName('');
         setLastName('');
         setEmail('');
@@ -36,7 +47,9 @@ function AdminSignup() {
       }
     } catch (error) {
       console.error('Error during admin registration:', error);
-      setMessage('An error occurred. Please try again.');
+      setMessage('Connection error. Please check if the backend server is running.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,6 +71,7 @@ function AdminSignup() {
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               required
+              disabled={isLoading}
             />
           </div>
           <div className="input-group">
@@ -68,6 +82,7 @@ function AdminSignup() {
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               required
+              disabled={isLoading}
             />
           </div>
           <div className="input-group">
@@ -78,6 +93,7 @@ function AdminSignup() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={isLoading}
             />
           </div>
           <div className="input-group">
@@ -88,6 +104,7 @@ function AdminSignup() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={isLoading}
             />
           </div>
           <div className="input-group">
@@ -98,11 +115,22 @@ function AdminSignup() {
               value={employeeId}
               onChange={(e) => setEmployeeId(e.target.value)}
               required
+              disabled={isLoading}
             />
           </div>
-          <button type="submit" className="login-button active">Register Admin</button>
+          <button 
+            type="submit" 
+            className={`login-button ${isLoading ? '' : 'active'}`}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Registering...' : 'Register Admin'}
+          </button>
         </form>
-        {message && <p className="error-message">{message}</p>}
+        {message && (
+          <p className={`error-message ${message.includes('successful') ? 'success-message' : ''}`}>
+            {message}
+          </p>
+        )}
       </div>
     </div>
   );
