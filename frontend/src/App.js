@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import StudentDashboard from './components/StudentDashboard';
 import EmployeeDashboard from './components/EmployeeDashboard';
+import Bulletin from './components/Bulletin';
 
 // Define a mapping of areas to their contained devices
 const allDevices = {
@@ -122,6 +123,7 @@ function App() {
               />
             }
           />
+          <Route path="/bulletin/" element={<Bulletin />}/>
         </Routes>
       </div>
     </Router>
