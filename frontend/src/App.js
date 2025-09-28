@@ -93,6 +93,7 @@ function App() {
       delete newStatus[itemId];
       return newStatus;
     });
+  };
 
   const handleLoginSuccess = () => {
     // Handle successful login - navigate to admin dashboard or desired page
